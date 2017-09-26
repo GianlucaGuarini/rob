@@ -1,46 +1,38 @@
-module Config ( r ) where
+module Config (get) where
 
-import Paths_rob (version)
+import qualified Paths_rob (version)
 import Data.Version (showVersion)
 
-import Data.Text (Text)
-import qualified Text.Karver
-import qualified Data.Text as T
-import qualified Data.Text.IO as TI
-import qualified Data.Yaml
-
 import System.Directory ( getHomeDirectory, doesFileExist )
+import System.FilePath ( joinPath, FilePath)
 
+-- | Confi file struct
 data Config = Config {
   version :: String,
-  templates :: [String]
+  templates :: [(String, String)]
 }
 
-robFile :: String
-robFile = ".rob"
+-- | Get the config file name
+configFileName :: String
+configFileName = ".rob"
 
-robVersion :: String
-robVersion = showVersion version
+-- | Return the Package version (stored in the .cabal file)
+packageVersion :: String
+packageVersion = showVersion Paths_rob.version
 
-defaults :: HashMap Text Value
-defaults = H.fromList $ [ ("version", Literal robVersion) ]
+-- | Get the whole path to the config file
+configFilePath :: String -> FilePath
+configFilePath base = joinPath [base, configFileName]
 
-createRobFile :: IO()
-createRobFile p = do
-  let robFile = karver.renderTemplate defaults "version {{version}}\n- templates:"
-  T.writeFile p robFile
-
-read :: IO (Maybe Config)
-read | hasRobFile = do
-        file <- yaml.decodeFile pathToRobFile :: IO (Maybe Config)
-        return file
-     | otherwise = do
-        createRobFile pathToRobFile
-        return read
-      where
-        home = do
-          path <- getHomeDirectory
-          return path
-        pathToRobFile = home + "/" + robFile
-        hasRobFile = doesFileExist pathToRobFile
-
+-- | Get the current Config file Data
+-- | If it doesn't exist it will create a new one 
+get :: IO ()
+get = do
+        print $ "Version:" ++ packageVersion
+        home <- getHomeDirectory
+        hasRobFile <- doesFileExist $ configFilePath home
+        if hasRobFile
+          then
+            print "has file"
+          else
+            print "must create"

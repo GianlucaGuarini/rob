@@ -5,6 +5,6 @@ import qualified Config
 
 main :: IO ()
 main = do
-  config <- Config.read
+  config <- Config.get
 
   print config

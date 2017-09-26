@@ -17,8 +17,9 @@ library
   hs-source-dirs:      src
   exposed-modules:     Config Questions
   build-depends:       base >= 4.7 && < 5
-                     , directory
-                     , text
+                     , directory > 1.2.0.0 && <= 1.3.0.0
+                     , text > 1.2.2.0 && <= 1.2.2.2
+                     , filepath > 1.4.1.0 && <= 1.4.1.2
                      , karver > 0.1.0 && <= 0.1.2
                      , yaml <= 0.8.23.3
   other-modules:       Paths_rob
