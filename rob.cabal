@@ -15,14 +15,16 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Config Questions
+  exposed-modules:     Config Questions Logger
   build-depends:       base >= 4.7 && < 5
-                     , directory > 1.2.0.0 && <= 1.3.0.0
-                     , text > 1.2.2.0 && <= 1.2.2.2
-                     , filepath > 1.4.1.0 && <= 1.4.1.2
-                     , karver > 0.1.0 && <= 0.1.2
-                     , unordered-containers > 0.2.7.0 && <= 0.2.8.0
+                     , directory <= 1.3.0.0
+                     , text <= 1.2.2.2
+                     , filepath <= 1.4.1.2
+                     , karver <= 0.1.2
+                     , unordered-containers <= 0.2.8.0
                      , yaml <= 0.8.23.3
+                     , ansi-terminal <= 0.6.3.1
+                     , time <= 1.6.0.1
   other-modules:       Paths_rob
   default-language:    Haskell2010
 

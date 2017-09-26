@@ -5,8 +5,10 @@ module Config (get) where
 import qualified Paths_rob (version)
 import Data.Version (showVersion)
 
-import System.Directory ( getHomeDirectory, doesFileExist )
-import System.FilePath ( joinPath, FilePath)
+import qualified Logger
+
+import System.Directory (getHomeDirectory, doesFileExist)
+import System.FilePath (joinPath, FilePath)
 
 import Text.Karver
 import Data.HashMap.Strict (HashMap)
@@ -57,5 +59,10 @@ get = do
         if hasRobFile
           then
             print "has file"
-          else
+          else do
+            Logger.warning $ unwords ["No", configFileName, "file was found in your $HOME path"]
+            Logger.info $ unlines [
+                "Creating a new config file in:",
+                joinPath [home, configFileName]
+              ]
             print renderDefaultConfiFile
