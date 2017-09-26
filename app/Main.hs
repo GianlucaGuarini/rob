@@ -6,5 +6,4 @@ import qualified Config
 main :: IO ()
 main = do
   config <- Config.get
-
   print config
