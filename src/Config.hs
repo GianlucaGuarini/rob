@@ -5,7 +5,7 @@ module Config (get) where
 import qualified Paths_rob (version)
 import Data.Version (showVersion)
 
-import qualified Logger
+import qualified Logger as Log
 
 import System.Directory (getHomeDirectory, doesFileExist)
 import System.FilePath (joinPath, FilePath)
@@ -60,9 +60,12 @@ get = do
           then
             print "has file"
           else do
-            Logger.warning $ unwords ["No", configFileName, "file was found in your $HOME path"]
-            Logger.info $ unlines [
+            Log.warning $ unwords [
+                "No",
+                configFileName,
+                "file was found in your $HOME path"
+              ]
+            Log.flatten Log.info [
                 "Creating a new config file in:",
                 joinPath [home, configFileName]
               ]
-            print renderDefaultConfiFile
