@@ -4,13 +4,11 @@
 module Config (get) where
 
 import Control.Lens hiding (element)
-import qualified Paths_rob (version)
-import Data.Version (showVersion)
-
-import qualified Logger as Log
-
 import System.Directory (getHomeDirectory, doesFileExist)
 import System.FilePath (joinPath, FilePath)
+
+import qualified Package
+import qualified Logger as Log
 
 import Text.Karver
 import Data.HashMap.Strict (HashMap)
@@ -38,17 +36,13 @@ makeLenses ''Config
 configFileName :: String
 configFileName = ".rob"
 
--- | Return the Package version (stored in the .cabal file)
-packageVersion :: String
-packageVersion = showVersion Paths_rob.version
-
 -- | Get the whole path to the config file
 configFilePath :: String -> FilePath
 configFilePath base = joinPath [base, configFileName]
 
 -- | Get the default config file data
 defaultConfigData :: Config
-defaultConfigData = Config packageVersion []
+defaultConfigData = Config Package.version []
 
 -- | Get the default template data
 defaultConfigTemplateData :: HashMap T.Text Value

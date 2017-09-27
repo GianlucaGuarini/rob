@@ -15,7 +15,10 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Config Questions Logger
+  exposed-modules:     Config
+                     , Questions
+                     , Logger
+                     , Package
   build-depends:       base >= 4.7 && < 5
                      , directory <= 1.3.0.0
                      , text <= 1.2.2.2
