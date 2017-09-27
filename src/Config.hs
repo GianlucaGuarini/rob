@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Config (get) where
 
+import Control.Lens hiding (element)
 import qualified Paths_rob (version)
 import Data.Version (showVersion)
 
@@ -16,11 +18,21 @@ import qualified Data.HashMap.Strict as H
 import qualified Data.Text as T
 import qualified Data.Text.IO as TI
 
--- | Confi file struct
+-- | Template name + path
+data Template = Template {
+  _name :: String,
+  _path :: FilePath
+} deriving (Show, Read)
+
+-- | Config file struct
 data Config = Config {
-  version :: String,
-  templates :: [(String, String)]
-}
+  _version :: String,
+  _templates :: [Template]
+} deriving (Show, Read)
+
+-- create the lenses for the custom data types
+makeLenses ''Template
+makeLenses ''Config
 
 -- | Get the config file name
 configFileName :: String
@@ -35,8 +47,14 @@ configFilePath :: String -> FilePath
 configFilePath base = joinPath [base, configFileName]
 
 -- | Get the default config file data
-defaultConfigData :: HashMap T.Text Value
-defaultConfigData = H.fromList [ ("version", Literal $ T.pack packageVersion) ]
+defaultConfigData :: Config
+defaultConfigData = Config packageVersion []
+
+-- | Get the default template data
+defaultConfigTemplateData :: HashMap T.Text Value
+defaultConfigTemplateData = H.fromList [
+                              ("version", Literal $ T.pack $ defaultConfigData^.version)
+                            ]
 
 -- | Default config file template
 defaultConfigTemplate :: T.Text
@@ -47,18 +65,20 @@ defaultConfigTemplate = T.pack $ unlines [
 
 -- | Render the default config file
 renderDefaultConfiFile :: String
-renderDefaultConfiFile = T.unpack $ renderTemplate defaultConfigData defaultConfigTemplate
+renderDefaultConfiFile = T.unpack $ renderTemplate defaultConfigTemplateData defaultConfigTemplate
 
 -- | Get the current Config file Data
 -- | If it doesn't exist it will create a new one
-get :: IO ()
+get :: IO Config
 get = do
-        print $ "Version:" ++ packageVersion
         home <- getHomeDirectory
-        hasRobFile <- doesFileExist $ configFilePath home
+        let configFile = configFilePath home
+        hasRobFile <- doesFileExist configFile
         if hasRobFile
-          then
-            print "has file"
+          then do
+            Log.success $ unwords [configFile, "was found!"]
+            -- TODO: read config file from the path
+            return defaultConfigData
           else do
             Log.warning $ unwords [
                 "No",
@@ -67,5 +87,8 @@ get = do
               ]
             Log.flatten Log.info [
                 "Creating a new config file in:",
-                joinPath [home, configFileName]
+                configFile
               ]
+            writeFile configFile renderDefaultConfiFile
+            -- return an empty Config object
+            return defaultConfigData
