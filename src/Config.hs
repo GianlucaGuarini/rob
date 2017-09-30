@@ -1,88 +1,70 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DeriveGeneric #-}
 
-module Config (get) where
-
-import Control.Lens hiding (element)
-import System.Directory (getHomeDirectory, doesFileExist)
-import System.FilePath (joinPath, FilePath)
+module Config (get, set) where
 
 import qualified Package
-import qualified Logger as Log
+import qualified Logger
 
-import Text.Karver
-import Data.HashMap.Strict (HashMap)
-import qualified Data.HashMap.Strict as H
-import qualified Data.Text as T
-import qualified Data.Text.IO as TI
+import Data.Maybe
+import qualified Data.Yaml as Yaml
+import qualified Data.ByteString.Char8 as Char
+import qualified GHC.Generics as GHC
+import qualified System.Directory as Directory
+import qualified System.FilePath as FilePath
 
 -- | Template name + path
 data Template = Template {
-  _name :: String,
-  _path :: FilePath
-} deriving (Show, Read)
+  name :: String,
+  path :: FilePath
+} deriving (GHC.Generic, Show)
+
+instance Yaml.FromJSON Template
+instance Yaml.ToJSON Template
 
 -- | Config file struct
 data Config = Config {
-  _version :: String,
-  _templates :: [Template]
-} deriving (Show, Read)
+  version :: String,
+  templates :: [Template]
+} deriving (GHC.Generic, Show)
 
--- create the lenses for the custom data types
-makeLenses ''Template
-makeLenses ''Config
+instance Yaml.FromJSON Config
+instance Yaml.ToJSON Config
 
 -- | Get the config file name
 configFileName :: String
 configFileName = ".rob"
 
 -- | Get the whole path to the config file
-configFilePath :: String -> FilePath
-configFilePath base = joinPath [base, configFileName]
+configFilePath :: IO FilePath
+configFilePath = do
+  home <- Directory.getHomeDirectory
+  return $ FilePath.joinPath [home, configFileName]
 
--- | Get the default config file data
-defaultConfigData :: Config
-defaultConfigData = Config Package.version []
-
--- | Get the default template data
-defaultConfigTemplateData :: HashMap T.Text Value
-defaultConfigTemplateData = H.fromList [
-                              ("version", Literal $ T.pack $ defaultConfigData^.version)
-                            ]
-
--- | Default config file template
-defaultConfigTemplate :: T.Text
-defaultConfigTemplate = T.pack $ unlines [
-    "version: {{ version }}",
-    "templates:"
-  ]
-
--- | Render the default config file
-renderDefaultConfiFile :: String
-renderDefaultConfiFile = T.unpack $ renderTemplate defaultConfigTemplateData defaultConfigTemplate
+set :: Config -> IO Config
+set config = do
+  configFilePath >>= \path -> Yaml.encodeFile path config
+  return config
 
 -- | Get the current Config file Data
 -- | If it doesn't exist it will create a new one
 get :: IO Config
 get = do
-        home <- getHomeDirectory
-        let configFile = configFilePath home
-        hasRobFile <- doesFileExist configFile
-        if hasRobFile
-          then do
-            Log.success $ unwords [configFile, "was found!"]
-            -- TODO: read config file from the path
-            return defaultConfigData
-          else do
-            Log.warning $ unwords [
-                "No",
-                configFileName,
-                "file was found in your $HOME path"
-              ]
-            Log.flatten Log.info [
-                "Creating a new config file in:",
-                configFile
-              ]
-            writeFile configFile renderDefaultConfiFile
-            -- return an empty Config object
-            return defaultConfigData
+         path <- configFilePath
+         hasConfigPath <- Directory.doesFileExist path
+         if hasConfigPath
+           then do
+             Logger.success $ unwords [path, "was found!"]
+             config <- Yaml.decodeFile path
+             return $ fromJust config
+           else do
+             Logger.warning $ unwords [
+                 "No",
+                 configFileName,
+                 "file was found in your $HOME path"
+               ]
+             Logger.flatten Logger.info [
+                 "Creating a new config file in:",
+                 path
+               ]
+             -- return an empty Config object and write it in the home directory
+             set $ Config Package.version []
