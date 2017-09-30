@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Config (get, set) where
+module Config (get, write) where
 
 import qualified Package
 import qualified Logger
@@ -40,8 +40,8 @@ configFilePath = do
   home <- Directory.getHomeDirectory
   return $ FilePath.joinPath [home, configFileName]
 
-set :: Config -> IO Config
-set config = do
+write :: Config -> IO Config
+write config = do
   configFilePath >>= \path -> Yaml.encodeFile path config
   return config
 
@@ -67,4 +67,4 @@ get = do
                  path
                ]
              -- return an empty Config object and write it in the home directory
-             set $ Config Package.version []
+             write $ Config Package.version []
