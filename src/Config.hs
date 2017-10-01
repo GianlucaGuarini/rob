@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
+
 module Config (get, write) where
 
 import qualified Package
@@ -15,15 +16,15 @@ import qualified System.FilePath as FilePath
 -- | Template name + path
 data Template = Template {
   name :: String,
-  path :: FilePath
+  path :: FilePath,
+  version :: String
 } deriving (GHC.Generic, Show)
 
 instance Yaml.FromJSON Template
 instance Yaml.ToJSON Template
 
 -- | Config file struct
-data Config = Config {
-  version :: String,
+newtype Config = Config {
   templates :: [Template]
 } deriving (GHC.Generic, Show)
 
@@ -32,7 +33,7 @@ instance Yaml.ToJSON Config
 
 -- | Get the config file name
 configFileName :: String
-configFileName = ".rob"
+configFileName = "." ++ Package.name
 
 -- | Get the whole path to the config file
 configFilePath :: IO FilePath
@@ -40,6 +41,7 @@ configFilePath = do
   home <- Directory.getHomeDirectory
   return $ FilePath.joinPath [home, configFileName]
 
+-- | Write the config file and return it
 write :: Config -> IO Config
 write config = do
   configFilePath >>= \path -> Yaml.encodeFile path config
@@ -67,4 +69,4 @@ get = do
                  path
                ]
              -- return an empty Config object and write it in the home directory
-             write $ Config Package.version []
+             write $ Config []

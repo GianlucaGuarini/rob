@@ -15,35 +15,39 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Config
-                     , Questions
-                     , Logger
-                     , Package
-  build-depends:       base >= 4.7 && < 5
-                     , directory <= 1.3.0.0
-                     , filepath <= 1.4.1.2
-                     , yaml <= 0.8.23.3
-                     , ansi-terminal <= 0.6.3.1
-                     , bytestring <= 0.10.8.1
-                     , time <= 1.6.0.1
+  exposed-modules:     Config,
+                       Tasks,
+                       Questions,
+                       Logger,
+                       Package
+  build-depends:       base >= 4.7 && < 5,
+                       directory <= 1.3.0.0,
+                       filepath <= 1.4.1.2,
+                       yaml <= 0.8.23.3,
+                       cmdargs >= 0.10.17 && <= 0.10.18,
+                       ansi-terminal <= 0.6.3.1,
+                       bytestring <= 0.10.8.1,
+                       time <= 1.6.0.1
   other-modules:       Paths_rob
   default-language:    Haskell2010
 
 executable rob
   hs-source-dirs:      app
   main-is:             Main.hs
+  build-depends:       base >= 4.7 && < 5,
+                       cmdargs >= 0.10.17 && <= 0.10.18
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , rob
+  build-depends:       base,
+                       rob
   default-language:    Haskell2010
 
 test-suite rob-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  build-depends:       base
-                     , directory
-                     , rob
+  build-depends:       base,
+                       directory,
+                       rob
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 

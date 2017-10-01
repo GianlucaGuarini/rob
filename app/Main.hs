@@ -1,9 +1,12 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Main ( main ) where
 
-import qualified Config
--- import qualified Questions
+import Tasks
+import System.Console.CmdArgs
 
-main :: IO ()
-main = do
-  config <- Config.get
-  print config
+main = parse =<< cmdArgsRun mode
+
+parse :: Task -> IO ()
+parse opts@Add {..} = print "Add new template"
+parse opts@New = print "Create a new project"
