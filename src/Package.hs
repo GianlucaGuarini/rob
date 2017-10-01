@@ -1,4 +1,4 @@
-module Package (version, name, author) where
+module Package where
 
 -- TODO: get these props from the .cabal file
 
@@ -16,3 +16,7 @@ name = "rob"
 -- | Return the package author
 author :: String
 author = "Author: Gianluca Guarini"
+
+-- | Return the package description
+description :: String
+description = "Projects generator"

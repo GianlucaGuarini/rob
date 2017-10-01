@@ -1,7 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-
-module Config (get, write) where
+module Config where
 
 import qualified Package
 import qualified Logger
@@ -51,22 +50,22 @@ write config = do
 -- | If it doesn't exist it will create a new one
 get :: IO Config
 get = do
-         path <- configFilePath
-         hasConfigPath <- Directory.doesFileExist path
-         if hasConfigPath
-           then do
-             Logger.success $ unwords [path, "was found!"]
-             config <- Yaml.decodeFile path
-             return $ fromJust config
-           else do
-             Logger.warning $ unwords [
-                 "No",
-                 configFileName,
-                 "file was found in your $HOME path"
-               ]
-             Logger.flatten Logger.info [
-                 "Creating a new config file in:",
-                 path
-               ]
-             -- return an empty Config object and write it in the home directory
-             write $ Config []
+  path <- configFilePath
+  hasConfigPath <- Directory.doesFileExist path
+  if hasConfigPath
+    then do
+      Logger.success $ unwords [path, "was found!"]
+      config <- Yaml.decodeFile path
+      return $ fromJust config
+    else do
+      Logger.warning $ unwords [
+          "No",
+          configFileName,
+          "file was found in your $HOME path"
+        ]
+      Logger.flatten Logger.info [
+          "Creating a new config file in:",
+          path
+        ]
+      -- return an empty Config object and write it in the home directory
+      write $ Config []

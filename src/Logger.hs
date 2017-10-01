@@ -1,4 +1,4 @@
-module Logger ( success, err, info, warning, flatten ) where
+module Logger where
 
 import System.Console.ANSI
 import Data.Time.Clock
