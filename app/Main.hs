@@ -1,12 +1,14 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module Main where
-  
-import Tasks
-import System.Console.CmdArgs
+
+import System.Console.CmdArgs (cmdArgsRun)
+import Tasks (Task(Add, New), mode)
+import Actions.Add (add)
+import Actions.New (new)
 
 main = parse =<< cmdArgsRun mode
 
 parse :: Task -> IO ()
-parse Add {..} = print "Add new template"
-parse New = print "Create a new project"
+parse Add {..} = add
+parse New = new

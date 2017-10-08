@@ -4,6 +4,7 @@ module Config where
 
 import qualified Package
 import qualified Logger
+import UserMessages (configFileFound, noConfigFileFound, configFileCreated)
 
 import Data.Maybe
 import qualified Data.Yaml as Yaml
@@ -54,18 +55,11 @@ get = do
   hasConfigPath <- Directory.doesFileExist path
   if hasConfigPath
     then do
-      Logger.success $ unwords [path, "was found!"]
+      Logger.success $ configFileFound path
       config <- Yaml.decodeFile path
       return $ fromJust config
     else do
-      Logger.warning $ unwords [
-          "No",
-          configFileName,
-          "file was found in your $HOME path"
-        ]
-      Logger.flatten Logger.info [
-          "Creating a new config file in:",
-          path
-        ]
+      Logger.warning $ noConfigFileFound configFileName
+      Logger.flatten Logger.info $ configFileCreated path
       -- return an empty Config object and write it in the home directory
       write $ Config []

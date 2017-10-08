@@ -2,6 +2,7 @@
 
 module Tasks where
 
+import UserMessages (newTaskHelp, addTaskHelp)
 import qualified Package
 import System.Console.CmdArgs
 
@@ -15,11 +16,11 @@ data Task
 
 -- | New task factory function
 new :: Task
-new = New &= help "Name of the template you want to use"
+new = New &= help newTaskHelp
 
 -- | Add task factory function
 add :: Task
-add = Add def def &= help "Add a new template"
+add = Add def def &= help addTaskHelp
 
 -- | Export all the command line modes
 mode :: Mode (CmdArgs Task)
