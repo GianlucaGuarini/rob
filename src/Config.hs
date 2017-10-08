@@ -18,7 +18,7 @@ data Template = Template {
   name :: String,
   path :: FilePath,
   version :: String
-} deriving (GHC.Generic, Show)
+} deriving (GHC.Generic, Show, Ord, Eq)
 
 instance Yaml.FromJSON Template
 instance Yaml.ToJSON Template
@@ -26,7 +26,7 @@ instance Yaml.ToJSON Template
 -- | Config file struct
 newtype Config = Config {
   templates :: [Template]
-} deriving (GHC.Generic, Show)
+} deriving (GHC.Generic, Show, Ord, Eq)
 
 instance Yaml.FromJSON Config
 instance Yaml.ToJSON Config
