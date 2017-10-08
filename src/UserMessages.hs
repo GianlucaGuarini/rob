@@ -55,3 +55,9 @@ noTemplatesAvailable = "It was not possible to find any project template. Have y
 
 tryAddingATemplate :: String
 tryAddingATemplate = "Try: " ++ Package.name ++ " " ++ "new template-name path/to/the/template/folder"
+
+projectPathDoesNotExist path = unwords [
+    "The path to",
+    "\"" ++ path ++ "\"",
+    "does not exist!"
+  ]

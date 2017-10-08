@@ -20,7 +20,10 @@ new = New &= help newTaskHelp
 
 -- | Add task factory function
 add :: Task
-add = Add def def &= help addTaskHelp
+add = Add {
+    Tasks.name = def &= typ "template-name" &= argPos 0,
+    Tasks.path = def &= typ "path/to/the/template/folder" &= argPos 1
+  } &= help addTaskHelp
 
 -- | Export all the command line modes
 mode :: Mode (CmdArgs Task)
