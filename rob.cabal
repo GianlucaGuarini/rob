@@ -18,7 +18,7 @@ library
   exposed-modules:     Config,
                        Tasks,
                        UserMessages,
-                       Questions,
+                       Questionnaire,
                        Logger,
                        Package,
                        Actions.New,

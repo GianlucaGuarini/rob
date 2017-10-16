@@ -2,7 +2,6 @@ module Actions.New (new) where
 
 import System.Exit
 import UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
-import Questions (select, Option)
 import Logger (err, warning)
 import Config
 
