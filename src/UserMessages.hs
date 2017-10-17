@@ -56,8 +56,22 @@ noTemplatesAvailable = "It was not possible to find any project template. Have y
 tryAddingATemplate :: String
 tryAddingATemplate = "Try: " ++ Package.name ++ " " ++ "new template-name path/to/the/template/folder"
 
+projectPathDoesNotExist :: FilePath -> String
 projectPathDoesNotExist path = unwords [
     "The path to",
     "\"" ++ path ++ "\"",
     "does not exist!"
+  ]
+
+projectQuestionnaireMissing :: FilePath -> String
+projectQuestionnaireMissing path = unwords [
+    "It was not possible to find any project.yml in",
+    "\"" ++ path ++ "\"",
+    "Please make sure to have a questionnaire project.yml in your template!"
+  ]
+
+projectAdded :: String -> String
+projectAdded name = unwords [
+    name,
+    "was added to your projects templates!"
   ]

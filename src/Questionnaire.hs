@@ -1,11 +1,14 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-module Questions ( run ) where
+module Questionnaire ( run, Questionnaire ) where
 
-import qualified Data.Yaml as Yaml
 import qualified GHC.Generics as GHC
-import Data.Aeson.Types.Internal (Object)
+import Data.Maybe
+import Data.Yaml
+import Data.Text (pack, Text)
+import Data.HashMap.Strict (HashMap, fromList)
 import Logger (info, warning, err)
 import Text.Read (readMaybe)
 import UserMessages (optionSelected, optionOutOfRange, invalidOptionValue, optionChoseOneOption)
@@ -15,11 +18,7 @@ type Option = (Int, String)
 type Options = [Option]
 
 -- | Responses to the questionnaire
-type ResponseValue = HashMap Text Value
-type ResponsesList = [ResponseValue]
-
-instance Yaml.FromJSON ResponsesList
-instance Yaml.ToJSON ResponsesList
+type ResponsesList = HashMap String String
 
 -- | Answers types
 type AnswersList = [String]
@@ -28,10 +27,9 @@ type AnswersList = [String]
 data Questionnaire = Questionnaire {
   questions :: [Question],
   meta :: Object
-} deriving (GHC.Generic, Show, Ord, Eq)
+} deriving (GHC.Generic, Show, Eq)
 
-instance Yaml.FromJSON Questionnaire
-instance Yaml.ToJSON Questionnaire
+instance FromJSON Questionnaire
 
 -- | Question struct
 data Question = Question {
@@ -43,20 +41,19 @@ data Question = Question {
 
 instance FromJSON Question where
     parseJSON (Object v) = do
-        question <- v .:  "question"
-        answers  <- v .:  "answers"
-        type'    <- v .:  "type"
-        default' <- v .:  "default"
+        question <- v .: "question"
+        answers  <- v .: "answers"
+        type'    <- v .: "type"
+        default' <- v .: "default"
         return Question { question, answers, type', default' }
-    parseJSON _ = empty
 
 -- | Simple question that requires a unique response
 simpleQuestion :: Question -> IO String
-simpleQuestion Question question = do print question; getLine
+simpleQuestion Question { question } = do print question; getLine
 
 -- | Multiple responses handling
 select :: Question -> AnswersList -> IO Int
-select Question question list = do
+select Question {question} list = do
   info question
   warning optionChoseOneOption
   putStrLn $ unlines $ map optionToString options
@@ -106,13 +103,14 @@ getOptionLabel (_, label) = label
 getQuestions :: Questionnaire -> [Question]
 getQuestions Questionnaire { questions } = questions
 
-run :: FilePath -> ResponsesList
+run :: FilePath -> IO ResponsesList
 run path = do
-  questionnaire <- Yaml.decodeFile path
-  let answers = map $ getQuestions questionnaire ask
+  questionnaire <- decodeFile path
+  return $ fromList $ map ask $ getQuestions $ fromJust questionnaire
 
-ask :: Question -> ResponseValue
-ask Question { question, answers, type', default' } =
-  | type' == "bool" = ("title", Literal "Grocery List")
-  | type' == "list" = ("title", Literal "Grocery List")
-  | type' == "string" = ("title", Literal "Grocery List")
+ask :: Question -> (String, String)
+ask Question { question, answers, type', default' }
+  | type' == "bool" = ("title", "Bool")
+  | type' == "list" = ("title", "List" )
+  | type' == "string" = ("title", "String")
+  | otherwise = ("title", "none")
