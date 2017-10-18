@@ -29,6 +29,7 @@ library
                        filepath <= 1.4.1.2,
                        yaml <= 0.8.23.3,
                        text <= 1.2.2.2,
+                       questioner <= 0.1.1.0,
                        unordered-containers <= 0.2.8.0,
                        cmdargs >= 0.10.17 && <= 0.10.18,
                        ansi-terminal <= 0.6.3.1,

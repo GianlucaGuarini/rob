@@ -7,7 +7,7 @@ module Questionnaire ( run, Questionnaire ) where
 import qualified GHC.Generics as GHC
 import Data.Maybe
 import Data.Yaml
--- import System.Console.Questioner (prompt)
+import System.Console.Questioner (prompt)
 import Data.Text (pack, Text)
 import Data.HashMap.Strict (HashMap, fromList)
 import qualified Logger
