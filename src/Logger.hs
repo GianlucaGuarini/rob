@@ -9,7 +9,7 @@ log' :: Color -> ColorIntensity -> String -> IO()
 log' color intensity message = do
   setSGR [SetColor Foreground Dull White]
   time <- getCurrentTime
-  putStr $ formatTime' time
+  print' $ formatTime' time
   setSGR [Reset]
   setSGR [SetColor Foreground intensity color]
   print' $ message ++ "\n"
@@ -38,6 +38,17 @@ info = log' Cyan Dull
 -- | Log warning messages
 warning :: String -> IO()
 warning = log' Yellow Dull
+
+-- | Question logger
+ask :: String -> IO()
+ask q = do
+  setSGR [SetColor Foreground Dull Cyan]
+  print' "?"
+  setSGR [Reset]
+  setSGR [SetColor Foreground Dull White]
+  print' $ q ++ "\n"
+  setSGR [Reset]
+
 
 -- | Log a raw message without using colors
 raw :: String -> IO()

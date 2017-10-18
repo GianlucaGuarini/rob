@@ -7,9 +7,10 @@ module Questionnaire ( run, Questionnaire ) where
 import qualified GHC.Generics as GHC
 import Data.Maybe
 import Data.Yaml
+-- import System.Console.Questioner (prompt)
 import Data.Text (pack, Text)
 import Data.HashMap.Strict (HashMap, fromList)
-import Logger (info, warning, err)
+import qualified Logger
 import Text.Read (readMaybe)
 import UserMessages (optionSelected, optionOutOfRange, invalidOptionValue, optionChoseOneOption)
 
@@ -32,8 +33,9 @@ instance FromJSON Answer
 instance ToJSON Answer
 
 -- | Questionnaier struct
+type KeyAndQuestion = (String, Question)
 data Questionnaire = Questionnaire {
-  questions :: [Question],
+  questions :: [KeyAndQuestion],
   meta :: Object
 } deriving (GHC.Generic, Show, Eq)
 
@@ -55,15 +57,13 @@ instance FromJSON Question where
         default' <- v .: "default"
         return Question { question, answers, type', default' }
 
--- | Simple question that requires a unique response
-simpleQuestion :: Question -> IO String
-simpleQuestion Question { question } = do print question; getLine
+
 
 -- | Multiple responses handling
 select :: Question -> AnswersList -> IO Int
 select Question {question} list = do
-  info question
-  warning optionChoseOneOption
+  Logger.ask question
+  Logger.warning optionChoseOneOption
   putStrLn $ unlines $ map optionToString options
   evaluateOption options
   where
@@ -77,15 +77,15 @@ evaluateOption options = do
     Just option ->
       if isOptionInRange options option
       then do
-        info $ optionSelected $ getOptionLabel $ options !! normalizedOption
+        Logger.info $ optionSelected $ getOptionLabel $ options !! normalizedOption
         return normalizedOption
       else do
-        err $ optionOutOfRange options
+        Logger.err $ optionOutOfRange options
         evaluateOption options
       where
         normalizedOption = option - 1
     Nothing -> do
-      err invalidOptionValue
+      Logger.err invalidOptionValue
       evaluateOption options
     where
       -- hoping to get an int here
@@ -108,17 +108,50 @@ getOptionLabel :: Option -> String
 getOptionLabel (_, label) = show label
 
 -- | Get only the questions out of a questionnaier data struct
-getQuestions :: Questionnaire -> [Question]
+getQuestions :: Questionnaire -> [KeyAndQuestion]
 getQuestions Questionnaire { questions } = questions
 
+-- | Print the default value for any answer
+-- | If it's null we skip it
+printDefault :: String -> IO()
+printDefault s =
+  if null s then
+    return ()
+  else
+    Logger.warning $ "Default Value:" ++ s
+
+-- | Simple question that requires a unique response
+input :: IO String
+input = do
+  res <- getLine
+  Logger.info res
+  return res
+
+-- | Boolean question either yes or no
+confirm :: IO Bool
+confirm = do
+  Logger.warning "(y/N)"
+  res <- getLine
+  Logger.info res
+  case res of
+    "y"   -> return True
+    "yes" -> return True
+    _     -> return False
+
+-- | Run the questionnaire mapping all the answers to a ResponsesList
 run :: FilePath -> IO ResponsesList
 run path = do
   questionnaire <- decodeFile path
-  return $ fromList $ map ask $ getQuestions $ fromJust questionnaire
+  responses <- mapM ask $ getQuestions $ fromJust questionnaire
+  return $ fromList responses
 
-ask :: Question -> (String, Answer)
-ask Question { question, answers, type', default' }
-  | type' == "bool" = ("title", Bool' True)
-  | type' == "list" = ("title", List' [Bool' True, Bool' False] )
-  | type' == "string" = ("title", String' "String")
-  | otherwise = ("title", Bool' False)
+ask :: KeyAndQuestion -> IO (String, Answer)
+ask (key, Question { question, answers, type', default' }) = do
+  Logger.ask question;
+  printDefault default'
+  case type' of
+    "input"         -> input >>= \answer -> return (key, String' answer)
+    "confirm"       -> confirm >>= \answer -> return (key, Bool' answer)
+    "select"        -> return ("title", List' [Bool' True, Bool' False] )
+    "multiselect"   -> return ("title", List' [Bool' True, Bool' False] )
+    _               -> return ("title", Bool' False)
