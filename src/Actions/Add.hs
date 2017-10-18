@@ -1,4 +1,4 @@
-module Actions.Add (add) where
+module Actions.Add (main) where
 
 import System.Directory
 import System.FilePath
@@ -7,8 +7,8 @@ import Logger (err, success)
 import qualified Data.Yaml as Yaml
 import Config (get, addTemplate, Template)
 
-add :: String -> FilePath -> IO()
-add name path = do
+main :: String -> FilePath -> IO()
+main name path = do
   hasProjectPath <- doesPathExist path
   if hasProjectPath then do
     hasQuestionnaire <- doesFileExist projectQuestionnairePath

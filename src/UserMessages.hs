@@ -49,6 +49,9 @@ newTaskHelp = "Create a new project in the current folder"
 addTaskHelp :: String
 addTaskHelp = "Add a new project template"
 
+listTaskHelp :: String
+listTaskHelp = "List all the available projects templates"
+
 -- Errors
 noTemplatesAvailable :: String
 noTemplatesAvailable = "It was not possible to find any project template. Have you ever tried adding one?"
@@ -75,3 +78,6 @@ projectAdded name = unwords [
     name,
     "was added to your projects templates!"
   ]
+
+availableTemplates :: String
+availableTemplates = "Available Templates:"

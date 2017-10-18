@@ -2,7 +2,7 @@
 
 module Tasks where
 
-import UserMessages (newTaskHelp, addTaskHelp)
+import UserMessages (newTaskHelp, addTaskHelp, listTaskHelp)
 import qualified Package
 import System.Console.CmdArgs
 
@@ -12,7 +12,12 @@ data Task
     name :: String,
     path :: FilePath
   }
+  | List
   | New deriving (Data, Typeable, Show)
+
+
+list :: Task
+list = List &= help listTaskHelp
 
 -- | New task factory function
 new :: Task
@@ -27,7 +32,7 @@ add = Add {
 
 -- | Export all the command line modes
 mode :: Mode (CmdArgs Task)
-mode = cmdArgsMode $ modes [new, add]
+mode = cmdArgsMode $ modes [new, add, list]
      &= help Package.description
      &= program Package.name
      &= summary (unwords [Package.name, "- v", Package.version, Package.author])
