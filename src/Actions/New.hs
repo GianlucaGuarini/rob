@@ -1,6 +1,7 @@
 module Actions.New (main) where
 
 import System.Exit
+import Questionnaire (Questionnaire)
 import UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
 import Logger (err, warning)
 import Config

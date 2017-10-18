@@ -2,20 +2,19 @@
 
 module Actions.List (main) where
 
-
-import UserMessages (availableTemplates)
+import System.Exit
+import Logger (info)
+import UserMessages (availableTemplates, empty)
 import Config (get, Config(..), Template(..))
-
-emptyString :: String
-emptyString = ""
 
 main :: IO()
 main = do
   config <- get
-  putStrLn emptyString
-  putStrLn availableTemplates
-  putStrLn emptyString
+  putStrLn empty
+  info availableTemplates
+  putStrLn empty
   putStrLn $ unlines $ listTemplates config
+  exitSuccess
 
 listTemplates :: Config -> [String]
 listTemplates Config { templates } = map templateToString templates

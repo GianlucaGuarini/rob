@@ -14,14 +14,22 @@ import Text.Read (readMaybe)
 import UserMessages (optionSelected, optionOutOfRange, invalidOptionValue, optionChoseOneOption)
 
 -- | Aliases to simplify the multiple options handling
-type Option = (Int, String)
+type Option = (Int, Answer)
 type Options = [Option]
 
--- | Responses to the questionnaire
-type ResponsesList = HashMap String String
-
 -- | Answers types
-type AnswersList = [String]
+data Answer =
+    Bool' Bool
+  | String' String
+  | List' AnswersList
+  deriving (GHC.Generic, Show, Ord, Eq)
+type AnswersList = [Answer]
+
+-- | Responses to the questionnaire
+type ResponsesList = HashMap String Answer
+
+instance FromJSON Answer
+instance ToJSON Answer
 
 -- | Questionnaier struct
 data Questionnaire = Questionnaire {
@@ -37,7 +45,7 @@ data Question = Question {
   answers :: AnswersList,
   default' :: String,
   type' :: String
-} deriving (Show, Ord, Eq)
+} deriving (GHC.Generic, Show, Ord, Eq)
 
 instance FromJSON Question where
     parseJSON (Object v) = do
@@ -93,11 +101,11 @@ createOptions list = [(i, list !! (i - 1)) | i <- [1..(length list)]]
 
 -- | Convert an option to string
 optionToString :: Option -> String
-optionToString (optionId, label) = show optionId ++ ") " ++ label
+optionToString (optionId, label) = show optionId ++ ") " ++ show label
 
 -- | Get the option label
 getOptionLabel :: Option -> String
-getOptionLabel (_, label) = label
+getOptionLabel (_, label) = show label
 
 -- | Get only the questions out of a questionnaier data struct
 getQuestions :: Questionnaire -> [Question]
@@ -108,9 +116,9 @@ run path = do
   questionnaire <- decodeFile path
   return $ fromList $ map ask $ getQuestions $ fromJust questionnaire
 
-ask :: Question -> (String, String)
+ask :: Question -> (String, Answer)
 ask Question { question, answers, type', default' }
-  | type' == "bool" = ("title", "Bool")
-  | type' == "list" = ("title", "List" )
-  | type' == "string" = ("title", "String")
-  | otherwise = ("title", "none")
+  | type' == "bool" = ("title", Bool' True)
+  | type' == "list" = ("title", List' [Bool' True, Bool' False] )
+  | type' == "string" = ("title", String' "String")
+  | otherwise = ("title", Bool' False)

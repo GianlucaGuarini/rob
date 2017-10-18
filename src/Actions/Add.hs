@@ -1,5 +1,6 @@
 module Actions.Add (main) where
 
+import System.Exit
 import System.Directory
 import System.FilePath
 import UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
@@ -16,9 +17,12 @@ main name path = do
       config <- get
       addTemplate config name path
       success $ projectAdded name
-    else
+      exitSuccess
+    else do
       err $ projectQuestionnaireMissing path
-  else
+      exitFailure
+  else do
     err $ projectPathDoesNotExist path
+    exitFailure
   where
     projectQuestionnairePath = joinPath [path, "project.yml"]
