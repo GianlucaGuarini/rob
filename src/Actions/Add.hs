@@ -1,15 +1,24 @@
-module Actions.Add (add) where
+module Actions.Add (main) where
 
-import UserMessages (projectPathDoesNotExist)
-import Logger (err)
 import System.Directory
 import System.FilePath
-import Config (get)
+import UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
+import Logger (err, success)
+import qualified Data.Yaml as Yaml
+import Config (get, addTemplate, Template)
 
-add :: String -> FilePath -> IO()
-add name path = do
+main :: String -> FilePath -> IO()
+main name path = do
   hasProjectPath <- doesPathExist path
-  if hasProjectPath then
-    print "Path exists!"
+  if hasProjectPath then do
+    hasQuestionnaire <- doesFileExist projectQuestionnairePath
+    if hasQuestionnaire then do
+      config <- get
+      addTemplate config name path
+      success $ projectAdded name
+    else
+      err $ projectQuestionnaireMissing path
   else
     err $ projectPathDoesNotExist path
+  where
+    projectQuestionnairePath = joinPath [path, "project.yml"]

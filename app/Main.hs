@@ -4,9 +4,10 @@ import System.Environment
 import System.Exit
 import System.Console.CmdArgs (cmdArgsRun)
 import System.Console.CmdArgs.Explicit(helpText, HelpFormat(..))
-import Tasks (Task(Add, New), mode, name, path)
-import Actions.Add (add)
-import Actions.New (new)
+import Tasks (Task(..), mode)
+import qualified Actions.Add
+import qualified Actions.New
+import qualified Actions.List
 
 main :: IO()
 main = do
@@ -15,10 +16,11 @@ main = do
   else parse =<< cmdArgsRun mode
 
 parse :: Task -> IO ()
-parse Add  {name = n, path = p} = add n p
-parse New = new
+parse Add  {name = n, path = p} = Actions.Add.main n p
+parse New = Actions.New.main
+parse List = Actions.List.main
 
 exitWithHelp :: IO a
 exitWithHelp = do
-  putStr $ show $ helpText [] HelpFormatAll mode
+  putStr $ show $ helpText [] HelpFormatOne mode
   exitSuccess

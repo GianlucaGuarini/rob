@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE NamedFieldPuns #-}
 
 module Config where
 
@@ -16,8 +17,7 @@ import qualified System.FilePath as FilePath
 -- | Template name + path
 data Template = Template {
   name :: String,
-  path :: FilePath,
-  version :: String
+  path :: FilePath
 } deriving (GHC.Generic, Show, Ord, Eq)
 
 instance Yaml.FromJSON Template
@@ -63,3 +63,9 @@ get = do
       Logger.flatten Logger.info $ configFileCreated path
       -- return an empty Config object and write it in the home directory
       write $ Config []
+
+-- | Add a new template to the config object and write it
+addTemplate :: Config -> String -> String -> IO Config
+addTemplate Config { templates } name path = write Config { templates = newTemplates }
+  where
+    newTemplates = templates ++ [Template { name, path }]

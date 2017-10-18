@@ -1,13 +1,12 @@
-module Actions.New (new) where
+module Actions.New (main) where
 
 import System.Exit
 import UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
-import Questions (select, Option)
 import Logger (err, warning)
 import Config
 
-new :: IO ()
-new = do
+main :: IO ()
+main = do
   availableTemplates <- get
   createNewProject availableTemplates
 
