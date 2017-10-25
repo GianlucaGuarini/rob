@@ -1,13 +1,14 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
-module Actions.New (main) where
+module Rob.Actions.New (main) where
+
+import Rob.Questionnaire (Questionnaire)
+import Rob.UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
+import Rob.Config (get, Config(..), Template(..))
 
 import System.Exit
-import Questionnaire (Questionnaire)
-import System.Console.Questioner (prompt)
-import UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
-import Logger (err, warning)
-import Config (get, Config(..), Template(..))
+import FortyTwo (select)
+import Rob.Logger (err, warning)
 
 main :: IO ()
 main = do
@@ -26,5 +27,5 @@ createNewProject (Config []) = do
   warning tryAddingATemplate
   exitFailure
 createNewProject (Config templates) = do
-  templatePath <- prompt (choseATemplate, map getTemplateName templates) :: IO [String]
+  templatePath <- select (choseATemplate, map getTemplateName templates)
   return ()

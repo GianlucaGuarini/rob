@@ -1,4 +1,4 @@
-module Logger where
+module Rob.Logger where
 
 import System.Console.ANSI
 import Data.Time.Clock
@@ -38,17 +38,6 @@ info = log' Cyan Dull
 -- | Log warning messages
 warning :: String -> IO()
 warning = log' Yellow Dull
-
--- | Question logger
-ask :: String -> IO()
-ask q = do
-  setSGR [SetColor Foreground Dull Cyan]
-  print' "?"
-  setSGR [Reset]
-  setSGR [SetColor Foreground Dull White]
-  print' $ q ++ "\n"
-  setSGR [Reset]
-
 
 -- | Log a raw message without using colors
 raw :: String -> IO()

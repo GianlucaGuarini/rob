@@ -1,11 +1,12 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
-module Actions.List (main) where
+module Rob.Actions.List (main) where
+
+import Rob.Logger (info)
+import Rob.UserMessages (availableTemplates, empty)
+import Rob.Config (get, Config(..), Template(..))
 
 import System.Exit
-import Logger (info)
-import UserMessages (availableTemplates, empty)
-import Config (get, Config(..), Template(..))
 
 main :: IO()
 main = do

@@ -1,35 +1,17 @@
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-module Config where
+module Rob.Config where
 
-import qualified Package
-import qualified Logger
-import UserMessages (configFileFound, noConfigFileFound, configFileCreated)
+import qualified Rob.Package as Package
+import qualified Rob.Logger as Logger
+import Rob.UserMessages (configFileFound, noConfigFileFound, configFileCreated)
+import Rob.Types (Config(..), Template(..))
 
 import Data.Maybe
 import qualified Data.Yaml as Yaml
 import qualified Data.ByteString.Char8 as Char
-import qualified GHC.Generics as GHC
 import qualified System.Directory as Directory
 import qualified System.FilePath as FilePath
-
--- | Template name + path
-data Template = Template {
-  name :: String,
-  path :: FilePath
-} deriving (GHC.Generic, Show, Ord, Eq)
-
-instance Yaml.FromJSON Template
-instance Yaml.ToJSON Template
-
--- | Config file struct
-newtype Config = Config {
-  templates :: [Template]
-} deriving (GHC.Generic, Show, Ord, Eq)
-
-instance Yaml.FromJSON Config
-instance Yaml.ToJSON Config
 
 -- | Get the config file name
 configFileName :: String

@@ -1,4 +1,4 @@
-module Package where
+module Rob.Package where
 
 -- TODO: get these props from the .cabal file
 

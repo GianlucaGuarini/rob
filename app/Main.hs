@@ -4,10 +4,10 @@ import System.Environment
 import System.Exit
 import System.Console.CmdArgs (cmdArgsRun)
 import System.Console.CmdArgs.Explicit(helpText, HelpFormat(..))
-import Tasks (Task(..), mode)
-import qualified Actions.Add
-import qualified Actions.New
-import qualified Actions.List
+import Rob.Types (Task(..), mode)
+import qualified Rob.Actions.Add
+import qualified Rob.Actions.New
+import qualified Rob.Actions.List
 
 main :: IO()
 main = do

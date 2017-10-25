@@ -1,20 +1,10 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+module Rob.Tasks where
 
-module Tasks where
+import qualified Rob.Package as Package
+import Rob.UserMessages (newTaskHelp, addTaskHelp, listTaskHelp)
+import Rob.Types (Tasks(..))
 
-import UserMessages (newTaskHelp, addTaskHelp, listTaskHelp)
-import qualified Package
 import System.Console.CmdArgs
-
--- | Task struct listing all the available actions
-data Task
-  = Add {
-    name :: String,
-    path :: FilePath
-  }
-  | List
-  | New deriving (Data, Typeable, Show)
-
 
 list :: Task
 list = List &= help listTaskHelp
