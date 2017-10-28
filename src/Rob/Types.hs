@@ -1,14 +1,12 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, DuplicateRecordFields, DeriveDataTypeable, OverloadedStrings #-}
 
 module Rob.Types where
 
 import GHC.Generics (Generic(..))
+import qualified System.FilePath as FilePath
 import Data.HashMap.Strict (HashMap)
 import Data.Yaml
+import Data.Maybe
 import System.Console.CmdArgs
 
 -- | Task struct listing all the available actions
@@ -24,7 +22,7 @@ data Task
 data Template = Template {
   name :: String,
   path :: FilePath
-} deriving (Generic, Show, Ord, Eq)
+} deriving (Generic, Show, Eq)
 
 instance FromJSON Template
 instance ToJSON Template
@@ -32,45 +30,54 @@ instance ToJSON Template
 -- | Config file struct
 newtype Config = Config {
   templates :: [Template]
-} deriving (Generic, Show, Ord, Eq)
+} deriving (Generic, Show, Eq)
 
 instance FromJSON Config
 instance ToJSON Config
 
--- | Answers types
-data Answer = Value | AnswersList deriving (Generic, Show, Eq)
-type Response = (String, Answer)
-type AnswersList = [Answer]
-
-instance FromJSON Answer
-instance ToJSON Answer
-
--- | Data we will pass to the project templates
-type TemplateData = HashMap Response
-
 -- | Question struct
-data QuestionMeta = QuestionMeta {
-  question :: String,
-  answers :: AnswersList,
-  default' :: String,
-  type' :: String
-} deriving (Generic, Show, Eq)
+data Question =
+    SimpleQuestion String String
+  | PasswordQuestion String
+  | ConfirmQuestion String Bool
+  | SelectQuestion String [String] String
+  | MultiselectQuestion String [String] [String]
+  deriving (Show, Eq)
 
-instance FromJSON QuestionMeta where
-    parseJSON (Object v) = do
-        question <- v .: "question"
-        answers  <- v .: "answers"
-        type'    <- v .: "type"
-        default' <- v .: "default"
-        return QuestionMeta { question, answers, type', default' }
+instance FromJSON Question where
+  parseJSON (Object v) = do
+    questionType <- v .:? "type" .!= "simple"
+    parseJSON (Object v) >>= parseQuestion questionType
 
-type Question = (String, QuestionMeta)
-type QuestionsList = [Question]
+parseQuestion :: String -> Value -> Parser Question
+parseQuestion questionType =
+  case questionType of
+    "confirm" -> withObject "ConfirmQuestion"
+      (\o -> ConfirmQuestion <$> o .: questionKey <*> o .:? defaultKey .!= False)
+    "select" -> withObject "SelectQuestion"
+      (\o -> SelectQuestion <$> o .: questionKey <*> o .:? answersKey .!= [] <*> o .:? defaultKey .!= "")
+    "multiselect" -> withObject "MultiselectQuestion"
+      (\o -> MultiselectQuestion <$> o .: questionKey <*> o .:? answersKey .!= [] <*> o .:? defaultKey .!= [])
+    "password" -> withObject "Password"
+      (\o -> PasswordQuestion <$> o .: questionKey)
+    _ -> withObject "SimpleQuestion"
+      (\o -> SimpleQuestion <$> o .: questionKey <*> o .:? defaultKey .!= "")
+  where
+    questionKey = "question"
+    answersKey = "answers"
+    defaultKey = "default"
 
 -- | Questionnaiere struct
 data Questionnaire = Questionnaire {
-  questions :: QuestionsList,
+  questions :: HashMap String Question,
   meta :: Object
 } deriving (Generic, Show, Eq)
 
 instance FromJSON Questionnaire
+
+-- | Responses types
+data Response =
+    SingleResponse String
+  | BooleanResponse Bool
+  | MultipleResponse [String]
+  deriving (Show, Eq)

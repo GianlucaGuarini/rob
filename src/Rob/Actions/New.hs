@@ -4,7 +4,8 @@ module Rob.Actions.New (main) where
 
 import Rob.Questionnaire (Questionnaire)
 import Rob.UserMessages (choseATemplate, noTemplatesAvailable, tryAddingATemplate)
-import Rob.Config (get, Config(..), Template(..))
+import Rob.Config (get)
+import Rob.Types (Config(..), Template(..))
 
 import System.Exit
 import FortyTwo (select)
@@ -27,5 +28,5 @@ createNewProject (Config []) = do
   warning tryAddingATemplate
   exitFailure
 createNewProject (Config templates) = do
-  templatePath <- select (choseATemplate, map getTemplateName templates)
+  templatePath <- select choseATemplate $ map getTemplateName templates
   return ()

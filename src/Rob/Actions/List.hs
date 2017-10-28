@@ -3,17 +3,18 @@
 module Rob.Actions.List (main) where
 
 import Rob.Logger (info)
-import Rob.UserMessages (availableTemplates, empty)
-import Rob.Config (get, Config(..), Template(..))
+import Rob.UserMessages (availableTemplates, emptyString)
+import Rob.Config (get)
+import Rob.Types(Config(..), Template(..))
 
 import System.Exit
 
 main :: IO()
 main = do
   config <- get
-  putStrLn empty
+  putStrLn emptyString
   info availableTemplates
-  putStrLn empty
+  putStrLn emptyString
   putStrLn $ unlines $ listTemplates config
   exitSuccess
 

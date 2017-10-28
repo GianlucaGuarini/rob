@@ -63,3 +63,6 @@ projectAdded name = unwords [
 
 availableTemplates :: String
 availableTemplates = "Available Templates:"
+
+emptyString :: String
+emptyString = ""

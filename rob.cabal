@@ -16,6 +16,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Rob.Config,
+                       Rob.Types,
                        Rob.Tasks,
                        Rob.UserMessages,
                        Rob.Questionnaire,
