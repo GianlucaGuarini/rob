@@ -1,12 +1,14 @@
-module Actions.Add (main) where
+module Rob.Actions.Add (main) where
+
+import Rob.Logger (err, success)
+import Rob.Config (get, addTemplate)
+import Rob.Types (Template(..))
+import Rob.UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
 
 import System.Exit
 import System.Directory
 import System.FilePath
-import UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
-import Logger (err, success)
 import qualified Data.Yaml as Yaml
-import Config (get, addTemplate, Template)
 
 main :: String -> FilePath -> IO()
 main name path = do

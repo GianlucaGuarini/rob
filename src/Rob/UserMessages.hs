@@ -1,29 +1,11 @@
-module UserMessages where
+module Rob.UserMessages where
 
-import qualified Package
+import qualified Rob.Package as Package
 
 -- Questions messages
 
 choseATemplate :: String
 choseATemplate = "Which template do you want to use?"
-
-optionSelected :: String -> String
-optionSelected option = "Congrats! You have chosen the option: " ++ option
-
-optionChoseOneOption :: String
-optionChoseOneOption = unlines ["Chose between one of these options:"]
-
-optionOutOfRange :: [a] -> String
-optionOutOfRange list = unwords [
-    "The option selected is not whithin the range of options provided",
-    "(1.." ++ show (length list) ++ ")"
-  ]
-
-invalidOptionValue :: String
-invalidOptionValue = unwords [
-    "Are you sure you have inserted a valid number?",
-    "Please try again."
-  ]
 
 -- Config messages
 configFileFound :: FilePath -> String
@@ -82,7 +64,5 @@ projectAdded name = unwords [
 availableTemplates :: String
 availableTemplates = "Available Templates:"
 
--- | Helpers
-
-empty :: String
-empty = ""
+emptyString :: String
+emptyString = ""

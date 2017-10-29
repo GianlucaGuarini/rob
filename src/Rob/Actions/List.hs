@@ -1,18 +1,20 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
-module Actions.List (main) where
+module Rob.Actions.List (main) where
+
+import Rob.Logger (info)
+import Rob.UserMessages (availableTemplates, emptyString)
+import Rob.Config (get)
+import Rob.Types(Config(..), Template(..))
 
 import System.Exit
-import Logger (info)
-import UserMessages (availableTemplates, empty)
-import Config (get, Config(..), Template(..))
 
 main :: IO()
 main = do
   config <- get
-  putStrLn empty
+  putStrLn emptyString
   info availableTemplates
-  putStrLn empty
+  putStrLn emptyString
   putStrLn $ unlines $ listTemplates config
   exitSuccess
 

@@ -1,4 +1,4 @@
-module Logger where
+module Rob.Logger where
 
 import System.Console.ANSI
 import Data.Time.Clock
@@ -9,7 +9,7 @@ log' :: Color -> ColorIntensity -> String -> IO()
 log' color intensity message = do
   setSGR [SetColor Foreground Dull White]
   time <- getCurrentTime
-  putStr $ formatTime' time
+  print' $ formatTime' time
   setSGR [Reset]
   setSGR [SetColor Foreground intensity color]
   print' $ message ++ "\n"
