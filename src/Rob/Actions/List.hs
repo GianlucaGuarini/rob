@@ -22,7 +22,7 @@ listTemplates :: Config -> [String]
 listTemplates Config { templates } = map templateToString templates
 
 templateToString :: Template -> String
-templateToString Template { name, path } = unlines [
+templateToString (Template name path) = unlines [
     "- Name: " ++ name,
     "  Path: " ++ path
   ]

@@ -19,10 +19,10 @@ data Task
   | New deriving (Data, Typeable, Show)
 
 -- | Template name + path
-data Template = Template {
-  name :: String,
-  path :: FilePath
-} deriving (Generic, Show, Eq)
+data Template = Template String FilePath deriving (Generic, Show)
+
+instance Eq Template where
+  (Template nameA _) == (Template nameB _) = nameA == nameB
 
 instance FromJSON Template
 instance ToJSON Template

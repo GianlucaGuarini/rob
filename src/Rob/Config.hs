@@ -50,4 +50,8 @@ get = do
 addTemplate :: Config -> String -> String -> IO Config
 addTemplate Config { templates } name path = write Config { templates = newTemplates }
   where
-    newTemplates = templates ++ [Template { name, path }]
+    newTemplate = Template name path
+    newTemplates = if newTemplate `elem` templates then
+        map (\t -> if t == newTemplate then newTemplate else t) templates
+      else
+        templates ++ [newTemplate]

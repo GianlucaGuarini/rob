@@ -17,10 +17,10 @@ main = do
   createNewProject availableTemplates
 
 getTemplateName :: Template -> String
-getTemplateName Template { name } = name
+getTemplateName (Template name _) = name
 
 getTemplatePath :: Template -> FilePath
-getTemplatePath Template { path } = path
+getTemplatePath (Template _ path) = path
 
 createNewProject :: Config -> IO ()
 createNewProject (Config []) = do
