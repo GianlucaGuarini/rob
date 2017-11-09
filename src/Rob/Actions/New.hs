@@ -43,9 +43,10 @@ createNewProject (Config templates) = do
   createProject $ getTemplatePathByName templates templateName
 
 createProject :: FilePath -> IO()
-createProject path =
-  if not $ null path then
+createProject path = do
+  putStrLn ""
+  if (not . null) path then do
+    print path
     print "run questionnaire"
-  else do
-    putStrLn ""
+  else
     err noTemplateSelected
