@@ -38,6 +38,9 @@ listTaskHelp = "List all the available projects templates"
 noTemplatesAvailable :: String
 noTemplatesAvailable = "It was not possible to find any project template. Have you ever tried adding one?"
 
+noTemplateSelected :: String
+noTemplateSelected = "No template selected. Please select one the list"
+
 tryAddingATemplate :: String
 tryAddingATemplate = "Try: " ++ Package.name ++ " " ++ "new template-name path/to/the/template/folder"
 
