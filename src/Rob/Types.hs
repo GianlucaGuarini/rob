@@ -68,9 +68,8 @@ parseQuestion questionType =
     defaultKey = "default"
 
 -- | Questionnaiere struct
-data Questionnaire = Questionnaire {
-  questions :: HashMap String Question,
-  meta :: Object
+newtype Questionnaire = Questionnaire {
+  questions :: HashMap String Question
 } deriving (Generic, Show, Eq)
 
 instance FromJSON Questionnaire

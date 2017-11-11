@@ -44,6 +44,9 @@ noTemplateSelected = "No template selected. Please select one the list"
 tryAddingATemplate :: String
 tryAddingATemplate = "Try: " ++ Package.name ++ " " ++ "new template-name path/to/the/template/folder"
 
+unableToParseQuestionnaire :: String
+unableToParseQuestionnaire = "It was not able to parse the project questionnaire"
+
 projectPathDoesNotExist :: FilePath -> String
 projectPathDoesNotExist path = unwords [
     "The path to",

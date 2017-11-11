@@ -45,8 +45,9 @@ createNewProject (Config templates) = do
 createProject :: FilePath -> IO()
 createProject path = do
   putStrLn ""
-  if (not . null) path then do
-    print path
-    print "run questionnaire"
+  if not . null $ path then do
+    responses <- run path
+    print responses
+    return ()
   else
     err noTemplateSelected
