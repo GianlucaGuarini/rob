@@ -5,6 +5,7 @@ module Rob.Types where
 import GHC.Generics (Generic(..))
 import qualified System.FilePath as FilePath
 import Data.HashMap.Strict (HashMap)
+import Data.Text (Text)
 import Data.Yaml
 import Data.Maybe
 import System.Console.CmdArgs
@@ -69,14 +70,7 @@ parseQuestion questionType =
 
 -- | Questionnaiere struct
 newtype Questionnaire = Questionnaire {
-  questions :: HashMap String Question
+  questions :: HashMap Text Question
 } deriving (Generic, Show, Eq)
 
 instance FromJSON Questionnaire
-
--- | Responses types
-data Response =
-    SingleResponse String
-  | BooleanResponse Bool
-  | MultipleResponse [String]
-  deriving (Show, Eq)

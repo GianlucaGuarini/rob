@@ -3,7 +3,7 @@ module Rob.Actions.Add (main) where
 import Rob.Logger (err, success)
 import Rob.Config (get, addTemplate)
 import Rob.Types (Template(..))
-import Rob.Questionnaire (hasPathQuestionnaire)
+import Rob.Project (hasPathQuestionnaire)
 import Rob.UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
 
 import System.Exit

@@ -1,35 +1,26 @@
 {-# LANGUAGE NamedFieldPuns #-}
 module Rob.Questionnaire where
 import Rob.Types
+import Rob.Project (questionnaireFileByPath, hasPathQuestionnaire)
 import Rob.UserMessages (unableToParseQuestionnaire, projectQuestionnaireMissing)
 import qualified Rob.Logger as Logger
 
 import System.Exit (exitFailure)
 import FortyTwo
 import Data.Yaml
-import Data.Maybe
-import System.Directory (doesFileExist)
-import System.FilePath.Posix (joinPath)
-import Data.HashMap.Strict (fromList, toList)
-
--- | Check if the path contains the questionnaire file
-hasPathQuestionnaire :: FilePath -> IO Bool
-hasPathQuestionnaire = doesFileExist . questionnaireFileByPath
-
--- | Get the questionnaire file by project path
-questionnaireFileByPath :: FilePath -> FilePath
-questionnaireFileByPath path = joinPath [path, "project.yml"]
+import qualified Data.Vector as V
+import Data.Text (Text, pack)
+import Data.HashMap.Strict (HashMap, toList)
 
 -- | Get only the questions out of a questionnaier data struct as list
-getQuestions :: Questionnaire -> [(String, Question)]
+getQuestions :: Questionnaire -> [(Text, Question)]
 getQuestions Questionnaire { questions } = toList questions
 
 -- | Run the questionnaire
-run :: FilePath -> IO [(String, Response)]
+run :: FilePath -> IO [(Text, Value)]
 run path = do
   hasQuestionnaireFile <- hasPathQuestionnaire path
   if hasQuestionnaireFile then do
-    -- print $ show questionnaireFile
     questionnaire <- decodeFileEither questionnaireFile
     case questionnaire of
       Right q -> mapM mapQuestion (getQuestions q)
@@ -44,27 +35,26 @@ run path = do
   where
     questionnaireFile = questionnaireFileByPath path
 
-
 -- Map all the questions to answers
-mapQuestion :: (String, Question) -> IO (String, Response)
+mapQuestion :: (Text, Question) -> IO (Text, Value)
 mapQuestion (key, q) = do
   answer <- ask q
   return (key, answer)
 
 -- Ask a Question to get a response from the user
-ask :: Question -> IO Response
+ask :: Question -> IO Value
 ask (PasswordQuestion question) = do
   res <- password question
-  return (SingleResponse res)
+  return (String $ pack res)
 ask (SimpleQuestion question defaultValue) = do
   res <- inputWithDefault question defaultValue
-  return (SingleResponse res)
+  return (String $ pack res)
 ask (SelectQuestion question answers defaultValue) = do
   res <- selectWithDefault question answers defaultValue
-  return (SingleResponse res)
+  return (String $ pack res)
 ask (ConfirmQuestion question defaultValue) = do
   res <- confirmWithDefault question defaultValue
-  return (BooleanResponse res)
+  return (Bool res)
 ask (MultiselectQuestion question answers defaultValues) = do
   res <- multiselectWithDefault question answers defaultValues
-  return (MultipleResponse res)
+  return (Array $ V.fromList $ map (String . pack) res)
