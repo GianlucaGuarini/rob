@@ -3,11 +3,20 @@ module Rob.Actions.New (main) where
 import Rob.Logger (err, warning, success)
 import Rob.Config (get, errorNoTemplatesAvailable)
 import Rob.Types (Config(..))
-import Rob.Project (getTemplatePathByName, getTemplateName, createFilesFromTemplate)
-import Rob.UserMessages (noTemplatesAvailable, choseATemplate, noTemplateSelected, tryAddingATemplate, projectSuccessfullyCreated, emptyString)
 import Rob.Questionnaire (run)
+import Rob.Project (getTemplatePathByName, getTemplateName, createFilesFromTemplate)
+import Rob.UserMessages (
+    noTemplatesAvailable,
+    choseATemplate,
+    noTemplateSelected,
+    tryAddingATemplate,
+    projectSuccessfullyCreated,
+    projectPathDoesNotExist,
+    emptyString
+  )
 
-import System.Exit
+import System.Exit (exitFailure, exitSuccess)
+import System.Directory (doesPathExist)
 import FortyTwo (select)
 
 main :: IO ()
@@ -23,11 +32,16 @@ createNewProject (Config templates) = do
   putStrLn emptyString
   if not . null $ templateName then do
     let path = getTemplatePathByName templates templateName
-    responses <- run path
-    putStrLn emptyString
-    createFilesFromTemplate path responses
-    success projectSuccessfullyCreated
-    exitSuccess
+    hasProjectPath <- doesPathExist path
+    if hasProjectPath then do
+      responses <- run path
+      putStrLn emptyString
+      createFilesFromTemplate path responses
+      success projectSuccessfullyCreated
+      exitSuccess
+    else do
+      err $ projectPathDoesNotExist path
+      exitFailure
   else do
     err noTemplateSelected
     exitFailure

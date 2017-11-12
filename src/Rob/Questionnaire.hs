@@ -8,9 +8,9 @@ import qualified Rob.Logger as Logger
 import System.Exit (exitFailure)
 import FortyTwo
 import Data.Yaml
-import qualified Data.Vector as V
 import Data.Text (Text, pack)
 import Data.HashMap.Strict (HashMap, toList)
+import qualified Data.Vector as V
 
 -- | Get only the questions out of a questionnaier data struct as list
 getQuestions :: Questionnaire -> [(Text, Question)]

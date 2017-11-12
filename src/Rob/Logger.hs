@@ -1,8 +1,8 @@
 module Rob.Logger where
 
 import System.Console.ANSI
-import Data.Time.Clock
-import Data.Time.Format
+import Data.Time.Clock (getCurrentTime, UTCTime)
+import Data.Time.Format (formatTime, defaultTimeLocale)
 
 -- | Print a message highlighting it
 log' :: Color -> ColorIntensity -> String -> IO()

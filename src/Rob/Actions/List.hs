@@ -5,7 +5,7 @@ import Rob.UserMessages (availableTemplates, emptyString)
 import Rob.Config (get, errorNoTemplatesAvailable)
 import Rob.Types(Config(..))
 
-import System.Exit
+import System.Exit (exitFailure, exitSuccess)
 
 main :: IO()
 main = do

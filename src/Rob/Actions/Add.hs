@@ -6,10 +6,8 @@ import Rob.Types (Template(..))
 import Rob.Project (hasPathQuestionnaire)
 import Rob.UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
 
-import System.Exit
-import System.Directory
-import System.FilePath
-import qualified Data.Yaml as Yaml
+import System.Exit (exitFailure, exitSuccess)
+import System.Directory (doesPathExist)
 
 main :: String -> FilePath -> IO()
 main name path = do

@@ -1,16 +1,15 @@
 module Rob.Config where
 
 import qualified Rob.Package as Package
-import qualified Rob.Logger as Logger
+import Rob.Logger (err, warning, success, info, flatten)
 import Rob.UserMessages (configFileFound, noConfigFileFound, configFileCreated, noTemplatesAvailable, tryAddingATemplate)
 import Rob.Types (Config(..), Template(..))
 
 import Data.Maybe
 import System.Exit
-import qualified Data.Yaml as Yaml
-import qualified Data.ByteString.Char8 as Char
-import qualified System.Directory as Directory
-import qualified System.FilePath as FilePath
+import System.FilePath (joinPath)
+import System.Directory (getHomeDirectory, doesFileExist)
+import Data.Yaml (encodeFile, decodeFile)
 
 -- | Get the config file name
 configFileName :: String
@@ -19,13 +18,13 @@ configFileName = "." ++ Package.name
 -- | Get the whole path to the config file
 configFilePath :: IO FilePath
 configFilePath = do
-  home <- Directory.getHomeDirectory
-  return $ FilePath.joinPath [home, configFileName]
+  home <- getHomeDirectory
+  return $ joinPath [home, configFileName]
 
 -- | Write the config file and return it
 write :: Config -> IO Config
 write config = do
-  configFilePath >>= \path -> Yaml.encodeFile path config
+  configFilePath >>= \path -> encodeFile path config
   return config
 
 -- | Get the current Config file Data
@@ -33,23 +32,23 @@ write config = do
 get :: IO Config
 get = do
   path <- configFilePath
-  hasConfigPath <- Directory.doesFileExist path
+  hasConfigPath <- doesFileExist path
   if hasConfigPath
     then do
-      Logger.success $ configFileFound path
-      config <- Yaml.decodeFile path
+      success $ configFileFound path
+      config <- decodeFile path
       return $ fromJust config
     else do
-      Logger.warning $ noConfigFileFound configFileName
-      Logger.flatten Logger.info $ configFileCreated path
+      warning $ noConfigFileFound configFileName
+      flatten info $ configFileCreated path
       -- return an empty Config object and write it in the home directory
       write $ Config []
 
 -- | Dispatch the no templates available error
 errorNoTemplatesAvailable :: IO ()
 errorNoTemplatesAvailable = do
-  Logger.err noTemplatesAvailable
-  Logger.warning tryAddingATemplate
+  err noTemplatesAvailable
+  warning tryAddingATemplate
   exitFailure
 
 -- | Add a new template to the config object and write it
