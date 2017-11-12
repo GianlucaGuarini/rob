@@ -1,7 +1,7 @@
 module Rob.Tasks where
 
 import qualified Rob.Package as Package
-import Rob.UserMessages (newTaskHelp, addTaskHelp, listTaskHelp)
+import Rob.UserMessages (newTaskHelp, addTaskHelp, listTaskHelp, removeTaskHelp)
 import qualified Rob.Types as Types (Task(..))
 
 import System.Console.CmdArgs
@@ -13,6 +13,10 @@ list = Types.List &= help listTaskHelp
 new :: Types.Task
 new = Types.New &= help newTaskHelp
 
+-- | New task factory function
+remove :: Types.Task
+remove = Types.Remove &= help removeTaskHelp
+
 -- | Add task factory function
 add :: Types.Task
 add = Types.Add {
@@ -22,7 +26,7 @@ add = Types.Add {
 
 -- | Export all the command line modes
 mode :: Mode (CmdArgs Types.Task)
-mode = cmdArgsMode $ modes [new, add, list]
+mode = cmdArgsMode $ modes [new, add, remove, list]
      &= help Package.description
      &= program Package.name
      &= summary (unwords [Package.name, "- v", Package.version, Package.author])

@@ -4,6 +4,7 @@ module Rob.Project where
 
 import Rob.Types (Template(..))
 import Rob.Logger (err, warning, success)
+import Rob.UserMessages (parserError)
 
 import Data.Yaml (Value)
 import Control.Monad (forM_, unless)
@@ -79,7 +80,8 @@ createFilesFromTemplate path responses =
       knownIgnoredStuff = globbify [".git", ".svn", projectDataFile]
       templateData = fromPairs responses
       fallback e inPath outPath = do
-        err $ show e
+        warning parserError
+        putStrLn e
         file <- readFile inPath
         writeFile outPath file
 

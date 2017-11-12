@@ -17,10 +17,17 @@ data Task
     path :: FilePath
   }
   | List
+  | Remove
   | New deriving (Data, Typeable, Show)
 
 -- | Template name + path
-data Template = Template String FilePath deriving (Generic, Show)
+data Template = Template String FilePath deriving (Generic)
+
+instance Show Template where
+  show (Template name path) = unlines [
+      "- Name: " ++ name,
+      "  Path: " ++ path
+    ]
 
 instance Eq Template where
   (Template nameA _) == (Template nameB _) = nameA == nameB

@@ -7,7 +7,11 @@ import qualified Rob.Package as Package
 choseATemplate :: String
 choseATemplate = "Which template do you want to use?"
 
+choseATemplateToDelete :: String
+choseATemplateToDelete = "Which template do you want to delete?"
+
 -- Config messages
+
 configFileFound :: FilePath -> String
 configFileFound path = unwords [path, "was found!"]
 
@@ -25,6 +29,7 @@ configFileCreated path = [
   ]
 
 -- Tasks help
+
 newTaskHelp :: String
 newTaskHelp = "Create a new project in the current folder"
 
@@ -34,7 +39,11 @@ addTaskHelp = "Add a new project template"
 listTaskHelp :: String
 listTaskHelp = "List all the available projects templates"
 
+removeTaskHelp :: String
+removeTaskHelp = "Remove a template from the list of the ones available"
+
 -- Errors
+
 noTemplatesAvailable :: String
 noTemplatesAvailable = "It was not possible to find any project template. Have you ever tried adding one?"
 
@@ -46,6 +55,7 @@ tryAddingATemplate = "Try: " ++ Package.name ++ " " ++ "new template-name path/t
 
 unableToParseQuestionnaire :: String
 unableToParseQuestionnaire = "It was not able to parse the project questionnaire"
+
 
 projectPathDoesNotExist :: FilePath -> String
 projectPathDoesNotExist path = unwords [
@@ -67,8 +77,20 @@ projectAdded name = unwords [
     "was added to your projects templates!"
   ]
 
+parserError :: String
+parserError = "There was a parser error, this file will be only copied"
+
+-- General info
+
 availableTemplates :: String
 availableTemplates = "Available Templates:"
+
+-- Success messages
+
+projectSuccessfullyCreated :: String
+projectSuccessfullyCreated = "Your project was successfully created"
+
+-- Helpers
 
 emptyString :: String
 emptyString = ""

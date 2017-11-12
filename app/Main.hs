@@ -9,6 +9,7 @@ import Rob.Tasks (mode)
 import qualified Rob.Actions.Add
 import qualified Rob.Actions.New
 import qualified Rob.Actions.List
+import qualified Rob.Actions.Remove
 
 main :: IO()
 main = do
@@ -20,6 +21,7 @@ parse :: Task -> IO ()
 parse Add  {name = n, path = p} = Rob.Actions.Add.main n p
 parse New = Rob.Actions.New.main
 parse List = Rob.Actions.List.main
+parse Remove = Rob.Actions.Remove.main
 
 exitWithHelp :: IO a
 exitWithHelp = do

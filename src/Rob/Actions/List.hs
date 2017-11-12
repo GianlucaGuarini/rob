@@ -1,11 +1,9 @@
-{-# LANGUAGE NamedFieldPuns #-}
-
 module Rob.Actions.List (main) where
 
 import Rob.Logger (info)
 import Rob.UserMessages (availableTemplates, emptyString)
-import Rob.Config (get)
-import Rob.Types(Config(..), Template(..))
+import Rob.Config (get, errorNoTemplatesAvailable)
+import Rob.Types(Config(..))
 
 import System.Exit
 
@@ -15,14 +13,11 @@ main = do
   putStrLn emptyString
   info availableTemplates
   putStrLn emptyString
-  putStrLn $ unlines $ listTemplates config
+  listTemplates config
   exitSuccess
 
-listTemplates :: Config -> [String]
-listTemplates Config { templates } = map templateToString templates
+-- | List all the templates as string
 
-templateToString :: Template -> String
-templateToString (Template name path) = unlines [
-    "- Name: " ++ name,
-    "  Path: " ++ path
-  ]
+listTemplates :: Config -> IO ()
+listTemplates (Config []) = errorNoTemplatesAvailable;
+listTemplates (Config templates) = putStrLn $ unlines $ map show templates
