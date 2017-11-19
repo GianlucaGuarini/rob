@@ -5,6 +5,7 @@ module Rob.Types where
 import GHC.Generics (Generic(..))
 import qualified System.FilePath as FilePath
 import Data.HashMap.Strict (HashMap)
+import System.FilePath.Glob (Pattern)
 import Data.Text (Text)
 import Data.Yaml
 import Data.Maybe
@@ -81,3 +82,5 @@ newtype Questionnaire = Questionnaire {
 } deriving (Generic, Show, Eq)
 
 instance FromJSON Questionnaire
+
+type Blacklist = [(FilePath, [Pattern])]
