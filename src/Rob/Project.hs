@@ -66,13 +66,18 @@ createFilesFromTemplate projectRoot responses = pathWalkInterruptible projectRoo
 populateBlacklist :: Blacklist -> FilePath -> IO Blacklist
 populateBlacklist blacklist root = do
     ignoredPatterns <- getIgnoredPatterns (map (\f -> joinPath [root, f]) ignoreFiles)
-    return $ union blacklist [(root, ignoredPatterns ++ knownIgnoredFiles)]
+    if null ignoredPatterns then
+      return blacklist
+    else
+      return $ union blacklist [(root, ignoredPatterns ++ knownIgnoredFiles)]
 
 -- | Parse a directory copying the files found into the current one
 -- | where rob was called, it will also render eventually the answers to the questionnaire
 -- | if template token will be found in any of the files
 parseDir :: FilePath -> FilePath -> [FilePath] -> Blacklist -> [(Text, Value)] -> IO WalkStatus
-parseDir root path files blacklist responses =
+parseDir root path files blacklist responses = do
+  print blacklist
+  print root
   if isInBlacklist path (takeFileName dirRelativePath) blacklist then
     return StopRecursing
   else do
