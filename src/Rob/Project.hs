@@ -3,7 +3,7 @@
 module Rob.Project where
 
 import Rob.Types (Template(..), Blacklist)
-import Rob.Logger (err, warning, success)
+import Rob.Logger (warning)
 import Rob.UserMessages (parserError)
 
 import Data.Yaml (Value)
@@ -12,7 +12,7 @@ import Data.Text (Text)
 import qualified Data.ByteString.Lazy as BS
 import Data.Text.Lazy.Encoding (encodeUtf8)
 import System.FilePath.Posix (makeRelative)
-import Data.List (isSuffixOf, isInfixOf, any, all, union, nub, intercalate)
+import Data.List (isInfixOf, any, all, union, nub, intercalate)
 import System.FilePath.Glob (match, compile, Pattern)
 import Text.EDE (eitherRender, eitherParseFile, fromPairs)
 import System.Directory.PathWalk (pathWalkInterruptible, WalkStatus(..))
@@ -29,7 +29,8 @@ getTemplatePath (Template _ path) = path
 
 -- Get the template name by its path
 getTemplatePathByName :: [Template] -> String -> FilePath
-getTemplatePathByName _ "" = ""
+getTemplatePathByName [] [] = ""
+getTemplatePathByName [] _ = ""
 getTemplatePathByName (x:xs) name =
   if templateName == name then
     templatePath
@@ -43,7 +44,10 @@ getTemplatePathByName (x:xs) name =
 projectDataFile :: String
 projectDataFile = "project.yml"
 
+ignoreFiles :: [FilePath]
 ignoreFiles = [".gitignore", "svnignore.txt"]
+
+knownIgnoredFiles :: [Pattern]
 knownIgnoredFiles = globbifyList [".git", ".svn", projectDataFile]
 
 -- | Check if the path contains the questionnaire file
@@ -56,7 +60,8 @@ questionnaireFileByPath path = joinPath [path, projectDataFile]
 
 -- | Create project files using the template and the user response received in the current directory
 createFilesFromTemplate :: FilePath -> [(Text, Value)] -> IO()
-createFilesFromTemplate projectRoot responses = pathWalkInterruptible projectRoot $ \tmpRoot dirs files -> do
+createFilesFromTemplate projectRoot responses =
+  pathWalkInterruptible projectRoot $ \tmpRoot _ files -> do
     blacklist <- populateBlacklist blacklist tmpRoot
     parseDir projectRoot tmpRoot files blacklist responses
   where

@@ -1,15 +1,13 @@
 module Rob.Actions.New (main) where
 
-import Rob.Logger (err, warning, success)
+import Rob.Logger (err, success)
 import Rob.Config (get, errorNoTemplatesAvailable)
 import Rob.Types (Config(..))
 import Rob.Questionnaire (run)
 import Rob.Project (getTemplatePathByName, getTemplateName, createFilesFromTemplate)
 import Rob.UserMessages (
-    noTemplatesAvailable,
     choseATemplate,
     noTemplateSelected,
-    tryAddingATemplate,
     projectSuccessfullyCreated,
     projectPathDoesNotExist,
     emptyString

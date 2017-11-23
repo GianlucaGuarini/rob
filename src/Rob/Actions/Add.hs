@@ -2,7 +2,6 @@ module Rob.Actions.Add (main) where
 
 import Rob.Logger (err, success)
 import Rob.Config (get, addTemplate)
-import Rob.Types (Template(..))
 import Rob.Project (hasPathQuestionnaire)
 import Rob.UserMessages (projectPathDoesNotExist, projectQuestionnaireMissing, projectAdded)
 
@@ -16,7 +15,7 @@ main name path = do
     hasQuestionnaire <- hasPathQuestionnaire path
     if hasQuestionnaire then do
       config <- get
-      addTemplate config name path
+      _ <- addTemplate config name path
       success $ projectAdded name
       exitSuccess
     else do

@@ -1,18 +1,16 @@
 module Rob.Actions.Remove (main) where
 
-import Rob.Logger (err, warning, success)
+import Rob.Logger (err)
 import Rob.Config (get, errorNoTemplatesAvailable, deleteTemplate)
 import Rob.Types (Config(..))
 import Rob.Project (getTemplateName)
 import Rob.UserMessages (
-    noTemplatesAvailable,
     choseATemplateToDelete,
     noTemplateSelected,
-    tryAddingATemplate,
     emptyString
   )
 
-import System.Exit
+import System.Exit (exitFailure, exitSuccess)
 import FortyTwo (select)
 
 main :: IO ()
@@ -27,7 +25,7 @@ nukeTemplate (Config templates) = do
   templateName <- select choseATemplateToDelete $ map getTemplateName templates
   putStrLn emptyString
   if (not . null) templateName then do
-    deleteTemplate (Config templates) templateName
+    _ <- deleteTemplate (Config templates) templateName
     exitSuccess
   else do
     err noTemplateSelected

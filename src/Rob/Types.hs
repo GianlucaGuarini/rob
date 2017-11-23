@@ -3,12 +3,10 @@
 module Rob.Types where
 
 import GHC.Generics (Generic(..))
-import qualified System.FilePath as FilePath
 import Data.HashMap.Strict (HashMap)
 import System.FilePath.Glob (Pattern)
 import Data.Text (Text)
 import Data.Yaml
-import Data.Maybe
 import System.Console.CmdArgs
 
 -- | Task struct listing all the available actions
