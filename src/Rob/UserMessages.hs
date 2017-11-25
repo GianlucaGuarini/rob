@@ -90,6 +90,9 @@ availableTemplates = "Available Templates:"
 projectSuccessfullyCreated :: String
 projectSuccessfullyCreated = "Your project was successfully created"
 
+fileCreated :: String -> String
+fileCreated file = "Create:" ++ file
+
 -- Helpers
 
 emptyString :: String

@@ -18,7 +18,7 @@ main = do
   config <- get
   nukeTemplate config
 
--- Remove a project from the available templates
+-- Remove a project template from the available ones
 nukeTemplate :: Config -> IO ()
 nukeTemplate (Config []) = errorNoTemplatesAvailable
 nukeTemplate (Config templates) = do

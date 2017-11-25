@@ -22,7 +22,7 @@ main = do
   config <- get
   createNewProject config
 
--- Create a new project if
+-- | Create a new project using one of the templates available
 createNewProject :: Config -> IO ()
 createNewProject (Config []) = errorNoTemplatesAvailable
 createNewProject (Config templates) = do

@@ -17,7 +17,6 @@ main = do
   exitSuccess
 
 -- | List all the templates as string
-
 listTemplates :: Config -> IO ()
 listTemplates (Config []) = errorNoTemplatesAvailable;
 listTemplates (Config templates) = putStrLn $ unlines $ map show templates
