@@ -93,7 +93,7 @@ questions:
       - babel-preset-es2017
 
   is_public:
-    question: Do you want to have this project to be public?
+    question: Is it public?
     type: confirm
 
   password:
