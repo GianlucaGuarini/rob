@@ -43,7 +43,7 @@ nodejs
 
 ### The `project.yml` file
 
-Rob relies on a single file that __you must include__ in any of your templates folders.
+Rob relies on a single file that __you must include__ in the root of your templates folders.
 This file is called __`project.yml`__
 
 For example, the `nodejs` template must also contain an additional `project.yml` file:
