@@ -1,14 +1,14 @@
 name:                rob
-version:             0.0.1
--- synopsis:
--- description:
+version:0.0.1
+synopsis:            Simple projects generator
+description:         See README at <https://github.com/GianlucaGuarini/rob/blob/develop/README.md>
 homepage:            https://github.com/gianlucaguarini/rob#readme
 license:             MIT
 license-file:        LICENSE
 author:              Gianluca Guarini
 maintainer:          gianluca.guarini@gmail.com
 copyright:           Gianlua Guarini
-category:            Web
+category:            CLI
 build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
