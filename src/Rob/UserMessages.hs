@@ -78,7 +78,7 @@ projectAdded name = unwords [
   ]
 
 parserError :: String
-parserError = "There was a parser error, this file will be only copied"
+parserError = "There was a parser error, this file will only be copied"
 
 -- General info
 
@@ -91,7 +91,7 @@ projectSuccessfullyCreated :: String
 projectSuccessfullyCreated = "Your project was successfully created"
 
 fileCreated :: String -> String
-fileCreated file = "Create:" ++ file
+fileCreated file = unwords ["Create:", file]
 
 -- Helpers
 

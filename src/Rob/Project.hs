@@ -17,7 +17,7 @@ import System.FilePath.Glob (match, simplify, compile, Pattern)
 import Text.EDE (eitherRender, eitherParseFile, fromPairs)
 import System.Directory.PathWalk (pathWalkInterruptible, WalkStatus(..))
 import System.Directory (doesFileExist, createDirectoryIfMissing)
-import System.FilePath (joinPath, takeDirectory, normalise, isDrive, isValid)
+import System.FilePath (joinPath, takeDirectory, normalise, isDrive, isValid, pathSeparator)
 
 -- | Get only the template name
 getTemplateName :: Template -> String
@@ -134,11 +134,17 @@ findIgnoredFilesList f = do
     return $ (
         globbifyList .
         extendIgnoredFiles .
+        removeSeparatorPrefix .
         cleanList
       ) $ lines file
   else return []
   where
     cleanList list = (\l -> (not . null) l && head l /= '#') `filter` list
+
+-- | Remove the initial separator prefix
+removeSeparatorPrefix :: [FilePath] -> [FilePath]
+removeSeparatorPrefix = map $ \p -> if head p == pathSeparator then tail p else p
+
 
 -- | Extend the ignored files in order to enhance the patterns matching
 -- | for example with the "/node_modules/*" pattern we will add also "/node_modules"
