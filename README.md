@@ -12,13 +12,17 @@ Simple projects generator written in Haskell
 
 # Installation
 
-```sh
+```shell
 $ cabal install rob
 ```
 
 # Usage
 
-```sh
+## TODO
+
+### Available commands
+
+```shell
 $ rob --help
 ```
 
