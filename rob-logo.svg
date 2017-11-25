@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="232px" height="325px" viewBox="0 0 232 325" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>Slice</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M64,11.5445984 C66.4872965,66.1055835 93.1002327,102.989796 126.269124,116.457798 C150.895271,126.457078 162.81793,149.129138 162.002345,186.783453 L183,186.783453 C183.98129,141.478829 166.922437,111.378961 133.793376,97.9271308 C109.207059,87.9440241 90.1689535,59.1224567 88,11.5445984 L64,11.5445984 Z" id="Path" fill="#752461" fill-rule="nonzero"></path>
+        <path d="M47,187.249275 L115,109 C112.333333,97 108,92 102,94 C96,96 73,123.333333 33,176 L47,187.249275 Z" id="Path-2" fill="#752461"></path>
+        <circle id="Oval" fill="#563C61" cx="60.5" cy="84.5" r="16.5"></circle>
+        <circle id="Oval" fill="#563C61" cx="129.5" cy="66.5" r="16.5"></circle>
+        <path d="M94.9368291,151.357774 C112.592211,162.119695 128.655082,161.963851 142.032104,150.525527 L136.117844,143.60885 C125.94735,152.305359 114.163671,152.419686 99.6734705,143.587116 L94.9368291,151.357774 Z" id="Path-3" fill="#563C61" fill-rule="nonzero" transform="translate(118.484467, 151.428991) rotate(-9.000000) translate(-118.484467, -151.428991) "></path>
+        <text id="Rob" font-family="CFGhostStories-Regular, CF Ghost Stories" font-size="120" font-weight="normal" fill="#563C61">
+            <tspan x="7.14" y="314">Rob</tspan>
+        </text>
+    </g>
+</svg>
