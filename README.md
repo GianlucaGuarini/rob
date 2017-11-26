@@ -146,5 +146,6 @@ Rob will automatically parse any `.gitignore` recursively in your selected templ
 
 - [ ] Unit test!
 - [ ] Improve performance
-- [ ] Write Documentation
+- [ ] Improve the documentation
+- [x] Write Documentation
 - [ ] Refactor the code and cleanup
