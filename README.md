@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="rob-logo.svg" alt="rob logo"/>
+  <img src="https://github.com/GianlucaGuarini/rob/develop/rob-logo.svg" alt="rob logo"/>
 </p>
 
 <p align="center">
@@ -18,15 +18,15 @@ $ cabal install rob
 
 # Usage
 
-Before using Rob you need to scaffold your projects templates.
+Before using Rob you need to create your projects templates.
 If for example you work often with nodejs you can create your `nodejs` template from scratch.
 Let's see then how to create a new Rob template.
 
-## Template setup
+## New Project Template Creation
 
 Create a folder anywhere on your machine.
 Put in this folder all the files/folders you want to use anytime you will chose this template.
-For example for the `nodejs` template you may have a folder structure that looks like this:
+For example for the `nodejs` template you may have a folder structure that might look like this:
 
 ```
 nodejs
@@ -43,7 +43,7 @@ nodejs
 
 ### The `project.yml` file
 
-Rob relies on a single file that __you must include__ in the root of your templates folders.
+Rob relies on a single file that __you must include in the root of your templates folders__.
 This file is called __`project.yml`__
 
 For example, the `nodejs` template must also contain an additional `project.yml` file:
@@ -56,9 +56,10 @@ nodejs
 ...
 ```
 
-The `project.yml` file will contain all the questions needed to render your project files.
-Depending on your answer to these questions Rob will be able to generate a (key, value) data
-structure that will be available in any project file to customize your project however you like
+The `project.yml` file will contain all the questions needed to copy and render your template files when you will chose that
+specific template.
+Depending on your answers to these questions Rob will be able to generate a (key, value) data
+map that will be used to shape your project files via [its template engine](#template-engine)
 
 A typical `project.yml` might look like this:
 
@@ -101,7 +102,7 @@ questions:
     type: password
 ```
 
-The kind of answers type supported are only `input`, `confirm`, `select`, `multiselect` and `password`.
+The kind of answers types supported are only `input`, `confirm`, `select`, `multiselect` and `password`. The questionnaire prompt are powered by [fortytwo](https://github.com/GianlucaGuarini/fortytwo)
 
 ### Template engine
 
@@ -131,9 +132,15 @@ For example:
 rob add simple-node-js `/Users/WhoAmI/Projects/rob-templates/nodejs`
 ```
 
+The command above will store the template in a file called `.rob` in your home directory.
+
 ## Create a new project
 
 Run `rob new` from any folder on your machine and if you have Rob templates available, it will create your project running the questionnaire and copying the files of the template chosen in the current directory
+
+### Autoignore files
+
+Rob will automatically parse any `.gitignore` recursively in your selected template folders to ignore specific files that you don't want to copy over when you create a new project
 
 # Todo
 
