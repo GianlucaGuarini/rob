@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/GianlucaGuarini/rob/develop/rob-logo.svg" alt="rob logo"/>
+  <img src="https://cdn.rawgit.com/GianlucaGuarini/rob/develop/rob-logo.svg" alt="rob logo"/>
 </p>
 
 <p align="center">
