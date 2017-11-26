@@ -7,7 +7,7 @@ Simple projects generator written in Haskell
 </p>
 
 ---
-> Call on me in the day of trouble, and I will deliver, and thou shalt glorify me.</p>
+> Call on me in the day of trouble, and I will deliver, and thou shalt glorify me.
 ###### Daniel Defoe, Robinson Crusoe
 
 # Installation
