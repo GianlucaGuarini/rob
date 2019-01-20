@@ -1,5 +1,5 @@
 name:                rob
-version:0.0.1
+version:             0.0.2.1
 synopsis:            Simple projects generator
 description:         See README at <https://github.com/GianlucaGuarini/rob/blob/develop/README.md>
 homepage:            https://github.com/gianlucaguarini/rob#readme
@@ -12,6 +12,8 @@ category:            CLI
 build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
+tested-with:         GHC == 8.4.4,
+                     GHC == 8.6.3
 
 library
   hs-source-dirs:      src
