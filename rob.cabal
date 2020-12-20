@@ -7,7 +7,7 @@ license:             MIT
 license-file:        LICENSE
 author:              Gianluca Guarini
 maintainer:          gianluca.guarini@gmail.com
-copyright:           Gianlua Guarini
+copyright:           Gianluca Guarini
 category:            CLI
 build-type:          Simple
 extra-source-files:  README.md
