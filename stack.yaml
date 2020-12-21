@@ -41,7 +41,11 @@ packages:
 # (e.g., acme-missiles-0.3)
 extra-deps: [
   "fortytwo-1.0.5",
-  "ede-0.2.9"
+  "ede-0.3.2.0",
+  "prettyprinter-ansi-terminal-1.1.2",
+  "prettyprinter-1.7.0@sha256:6a9569e21fa61163a7f066d23d701e23e917893e8f39733d6e617ec72787ae5f,6007",
+  "trifecta-2.1@sha256:2a087ff4b1a6ea9e506a578a4161743b7bf1025e1ef4934a6d5d14f778e7609d,4116",
+  "vector-0.12.1.2@sha256:9291bc581f36e51d5bda9fce57cb980fbec3dd292996896f285fef39eb80a9a0,7364"
 ]
 
 # Override default flag values for local packages and extra-deps
